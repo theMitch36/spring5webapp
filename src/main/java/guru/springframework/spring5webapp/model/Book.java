@@ -3,16 +3,19 @@ package guru.springframework.spring5webapp.model;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Objects;
 
 @Entity
-
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private String title;
     private String isbn;
-    private String publisher;
+
+    @OneToOne
+    private Publisher publisher;
 
     @ManyToMany
     @JoinTable(name = "author_book", joinColumns = @JoinColumn(name = "book_id"),
@@ -22,13 +25,13 @@ public class Book {
     public Book() {
     }
 
-    public Book(String title, String isbn, String publisher) {
+    public Book(String title, String isbn, Publisher publisher) {
         this.title = title;
         this.isbn = isbn;
         this.publisher = publisher;
     }
 
-    public Book(String title, String isbn, String publisher, Set<Author> authors) {
+    public Book(String title, String isbn, Publisher publisher, Set<Author> authors) {
         this.title = title;
         this.isbn = isbn;
         this.publisher = publisher;
@@ -51,11 +54,37 @@ public class Book {
 
     public void setIsbn(String isbn) { this.isbn = isbn; }
 
-    public String getPublisher() { return publisher; }
+    public Publisher getPublisher() { return publisher; }
 
-    public void setPublisher(String publisher) { this.publisher = publisher; }
+    public void setPublisher(Publisher publisher) { this.publisher = publisher; }
 
     public Set<Author> getAuthors() { return authors; }
 
     public void setAuthors(Set<Author> authors) { this.authors = authors; }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        Book book = (Book) object;
+        return java.util.Objects.equals(id, book.id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), id);
+    }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", isbn='" + isbn + '\'' +
+                ", publisher='" + publisher + '\'' +
+                ", authors=" + authors +
+                '}';
+    }
 }

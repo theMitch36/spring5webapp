@@ -3,6 +3,7 @@ package guru.springframework.spring5webapp.model;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Objects;
 
 @Entity
 public class Author {
@@ -51,4 +52,28 @@ public class Author {
 
     public void setBooks(Set<Book> books) { this.books = books; }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        Author author = (Author) object;
+        return java.util.Objects.equals(id, author.id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), id);
+    }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        return "Author{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", books=" + books +
+                '}';
+    }
 }
